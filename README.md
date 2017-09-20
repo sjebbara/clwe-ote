@@ -4,7 +4,7 @@ Research code for the paper "Improving Opinion-Traget Extraction with Character-
 
 ---
 
-h3. Abstract
+## Abstract
 > Fine-grained sentiment analysis is receiving increasing attention in recent
 years. Extracting opinion target expressions (OTE) in reviews is often an important
 step in fine-grained, aspect-based sentiment analysis. Retrieving this information from user-generated text, however, can be
@@ -15,7 +15,7 @@ performance for the identification of opinion target expressions. We integrate i
 sequence labeling system using character-level word embeddings and show their positive impact on the system's performance. Specifically, we obtain an increase by 3.3 points F1-score with respect to our
 baseline model. In further experiments, we reveal encoded character patterns of the learned embeddings and give a nuanced view of the performance differences of both models.
 
-
+## Paper
 The Paper can be found here:
 <https://pub.uni-bielefeld.de/publication/2913711>
 and
@@ -23,7 +23,7 @@ and
 
 ---
 
-Bibtex:
+## Bibtex:
 ```
 @InProceedings{jebbara-cimiano:2017:SCLeM,
   author    = {Jebbara, Soufian  and  Cimiano, Philipp},
