@@ -47,3 +47,5 @@ If you have any qeustion, send me a message on Github or an email.
 * Keras (Version 1.2.0)
 * NLPUtils <https://github.com/sjebbara/NLPUtils> (Commit a4a506af653e119385d096a9e26ddfbc42de93ac)
 * Theano
+* sklearn
+* unidecode
