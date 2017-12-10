@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import io
 import os
 import numpy
@@ -55,7 +57,7 @@ def get_test_configurations():
 
     ###############################################
     conf = get_base_config()
-    conf.model = models.char_bielugru.func_name
+    conf.model = models.char_bielugru.__name__
     conf.use_pos = False
     conf.data_split = "original"
     conf.top_k_vocab = 50000
@@ -65,7 +67,7 @@ def get_test_configurations():
 
     ###############################################
     conf = get_base_config()
-    conf.model = models.bielugru.func_name
+    conf.model = models.bielugru.__name__
     conf.use_pos = False
     conf.data_split = "original"
     conf.top_k_vocab = 50000
@@ -80,7 +82,7 @@ def get_configurations():
 
     for sequence_embedding_size in [50, 100, 200]:
         for top_k_vocab in [10000, 20000, 50000]:
-            for model in [models.char_bielugru.func_name]:
+            for model in [models.char_bielugru.__name__]:
                 for char_embedding_size in [20, 50, 100]:
                     conf = get_base_config()
                     conf.model = model
@@ -89,7 +91,7 @@ def get_configurations():
                     conf.top_k_vocab = top_k_vocab
                     configs.append(conf)
 
-            for model in [models.bielugru.func_name]:
+            for model in [models.bielugru.__name__]:
                 conf = get_base_config()
                 conf.model = model
                 conf.sequence_embedding_size = sequence_embedding_size
@@ -102,10 +104,10 @@ def get_configurations():
 
 def main(conf, plot_scores=True):
     conf.experiment_id = "AspectBasedSentiment_Configuration_" + LearningTools.get_timestamp()
-    print conf
+    print(conf)
     base_dirpath = os.path.join(EXPERIMENTS_OUTPUT_DIR, "AspectBasedSentiment_" + conf.timestamp, conf.experiment_id)
     os.makedirs(base_dirpath)
-    print "read dataset..."
+    print("read dataset...")
 
     # Read documents and split in train/val portions
     if conf.data_split == "original":
@@ -141,7 +143,7 @@ def main(conf, plot_scores=True):
     # read character vocabulary (map from word to index and back)
     char_vocabulary = DataTools.Vocabulary()
     char_vocab = Counter(c for w in word_embeddings.vocabulary.vocab for c in unidecode(w) if c != " ")
-    print char_vocab.most_common()
+    print(char_vocab.most_common())
     char_vocabulary.init_from_vocab(char_vocab)
     char_vocabulary.add_padding("<0>", 0)
     char_vocabulary.add_unknown("<?>", 1)
@@ -176,12 +178,13 @@ def main(conf, plot_scores=True):
                                                                                                   conf.sequence_embedding_size,
                                                                                                   conf.char_embedding_size,
                                                                                                   conf.top_k_vocab)
-        print "Model:", model_name
-        print conf
+        print("Model:", model_name)
+        print(conf)
 
         # instantiate model using the defined configuration
         model_fn = models.__dict__[conf.model]
         modelz = model_fn(word_embedding_weights=[word_embeddings.W], **conf)
+
         # modelz[0] is the model for tagging sentences, modelz[1] for obtaining a char-level vector for a word
         model = modelz[0]
 
@@ -194,10 +197,10 @@ def main(conf, plot_scores=True):
         for e in range(conf.n_epochs):
             process.train_aspects(model, train_documents, word_embeddings.vocabulary, pos_vocabulary, char_vocabulary,
                                   conf, e, n_epochs=conf.n_epochs)
-            print "\n\nEvaluate on TRAIN"
+            print("\n\nEvaluate on TRAIN")
             train_results = process.evaluate_aspects(model, train_documents, word_embeddings.vocabulary, pos_vocabulary,
                                                      char_vocabulary, conf, verbose=False)
-            print "\n\nEvaluate on VAL"
+            print("\n\nEvaluate on VAL")
             val_results = process.evaluate_aspects(model, val_documents, word_embeddings.vocabulary, pos_vocabulary,
                                                    char_vocabulary, conf)
 
@@ -227,29 +230,28 @@ def main(conf, plot_scores=True):
                     best_model = (f1, e)
 
             with io.open(os.path.join(cv_dirpath, "scores.txt".format(e + 1)), "a") as f:
-                f.write(u"{:.6f}\n".format(f1))
+                f.write("{:.6f}\n".format(f1))
 
-        print [w.shape for w in model.get_weights()]
+        print("best model:", best_model)
 
-        print "best model:", best_model
         ############ Save Model Weights ############
         model.save_weights(os.path.join(models_dirpath, "final_weights.h5"))
 
     if plot_scores:
         numpy.save("../results/scores_{}.npy".format(conf.model), score_plot.scores["F1"])
-    print "Best Epoch {} with score {}".format(best_epoch, best_score)
+    print("Best Epoch {} with score {}".format(best_epoch, best_score))
 
 
 if __name__ == "__main__":
     plot_scores = True
     if len(sys.argv) > 1:
         plot_scores = not sys.argv[1].lower() == "--no-plot"
-        print "Plot: ", plot_scores
+        print("Plot: ", plot_scores)
     timestamp = LearningTools.get_timestamp()
 
     configs = get_test_configurations()
     # configs = get_configurations()
     for config in configs:
         config.timestamp = timestamp
-        print timestamp
+        print(timestamp)
         main(config, plot_scores)
