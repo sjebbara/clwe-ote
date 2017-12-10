@@ -1,10 +1,8 @@
-
+from keras import activations, initializers, regularizers, constraints
 from keras import backend as K
 from keras.engine import InputSpec
-from keras.layers import Recurrent, ELU, Wrapper
-from keras import activations, initializers, regularizers, constraints
+from keras.layers import Recurrent, Wrapper
 from keras.layers.recurrent import _time_distributed_dense
-from keras.legacy import interfaces
 
 
 def _elu(x):

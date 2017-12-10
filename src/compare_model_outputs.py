@@ -1,8 +1,9 @@
 import sys
-import data
+
 from nlputils import DataTools
 from nlputils import EvaluationTools
 
+import data
 
 token_output_filename = "/vol/scstaff/sjebbara/data/AspectBasedSentiment/experiments/Final EMNLP SCLeM Test/best_epochs/epoch=35_predicted_aspects_2016_token.xml"
 char_output_filename = "/vol/scstaff/sjebbara/data/AspectBasedSentiment/experiments/Final EMNLP SCLeM Test/best_epochs/epoch=73_predicted_aspects_2016_char.xml"

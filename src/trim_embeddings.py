@@ -1,5 +1,6 @@
-import data
 from nlputils import DataTools
+
+import data
 
 for top_k in [10000, 20000, 50000]:
     word_embeddings = DataTools.Embedding()

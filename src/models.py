@@ -1,8 +1,8 @@
 from keras.engine import Input
 from keras.engine import Model
-from keras.regularizers import L1L2
-from keras.layers import Embedding, TimeDistributed, Dense, Dropout, ELU, Bidirectional, concatenate
+from keras.layers import Embedding, TimeDistributed, Dense, Dropout, Bidirectional, concatenate
 from keras.optimizers import Adam
+from keras.regularizers import L1L2
 
 from custom_layers import BetterTimeDistributed, ELUGRU
 

@@ -2,17 +2,18 @@ from __future__ import print_function
 
 import io
 import os
-import numpy
 import sys
-import data
-import models
-import process
-
 from collections import Counter
+
+import numpy
 from nlputils import DataTools
 from nlputils import LearningTools
 from nlputils import LexicalTools
 from unidecode import unidecode
+
+import data
+import models
+import process
 
 EXPERIMENTS_OUTPUT_DIR = "/home/sjebbara/data/AspectBasedSentiment/experiments/"
 

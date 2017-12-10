@@ -1,7 +1,9 @@
-import data
-import numpy
 from collections import Counter
+
+import numpy
 from nlputils import LexicalTools
+
+import data
 
 sentences2016_train = data.read_semeval2016_restaurant_train("sentence", LexicalTools.lower, "advanced2", None,
                                                              data.opinion_non_null_filter).sentences

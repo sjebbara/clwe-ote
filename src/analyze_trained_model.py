@@ -1,37 +1,43 @@
 import os
-
-import AspectExtraction
-import data
-import models
-import numpy
 from collections import defaultdict
-from sklearn.manifold import TSNE
+
+import numpy
 from nlputils import DataTools
 from nlputils import DatasetTools
 from nlputils import LearningTools
-from nlputils import LexicalTools
 from nlputils import VisualizeEmbeddings
+from sklearn.manifold import TSNE
 from unidecode import unidecode
 
+import AspectExtraction
+import models
+
+# If you want to uses this script your probably have to modify the code to some extend.
+# It is still strongly tied to the environment of my workstation in the university
+
+# specify the model that you want to visualize
 cv_dirname = "cv-1"
 experiment_base_dirpath = os.path.join(AspectExtraction.EXPERIMENTS_OUTPUT_DIR,
                                        "Final EMNLP SCLeM Test/AspectBasedSentiment_Configuration_2017-06-07_17:22:22_2016_char")
+# load the configuration that specifies the network topology
 conf = LearningTools.Configuration.load(os.path.join(experiment_base_dirpath, cv_dirname, "configuration.conf"))
 
 print conf
-
-char_vocabulary = DataTools.Vocabulary()
-char_vocabulary.load(os.path.join(experiment_base_dirpath, "char_vocabulary.txt"))
-char_vocabulary.set_padding(char_vocabulary.get_index("<0>"))
-char_vocabulary.set_unknown(char_vocabulary.get_index("<?>"))
-print char_vocabulary
 
 model_fn = models.__dict__[conf.model]
 modelz = model_fn(word_embedding_weights=None, **conf)
 char_model = modelz[1]
 
+# load the trained weights
 weights = char_model.load_weights(os.path.join(experiment_base_dirpath, cv_dirname, "models/best_model.h5"),
                                   by_name=True)
+
+# load resources: character vocabulary and pretrained word embeddings
+char_vocabulary = DataTools.Vocabulary()
+char_vocabulary.load(os.path.join(experiment_base_dirpath, "char_vocabulary.txt"))
+char_vocabulary.set_padding(char_vocabulary.get_index("<0>"))
+char_vocabulary.set_unknown(char_vocabulary.get_index("<?>"))
+print char_vocabulary
 
 word_embeddings = DataTools.Embedding()
 word_embeddings.load("../res/embeddings/amazon_review_corpus_en_100D_advanced_top-100000_W.npy",
@@ -42,19 +48,20 @@ word_embeddings.vocabulary.set_unknown(word_embeddings.vocabulary.get_index("<UN
 vocab = LearningTools.load_as_list("../res/embeddings/amazon_review_corpus_en_100D_advanced_top-100000_vocab.txt",
                                    to_object=lambda line: line.split(" ")[0])
 
-prefixes = ["un", "de"]
+# specify the suffixes and their respective colors
 suffix_colors = dict([("ing", "r"), ("ly", "g"), ("able", "b"), ("ish", "c"), ("less", "m"), ("ize", "y")])
 suffixes = suffix_colors.keys()
 suffix_colors["other"] = "k"
 
+# specify the words to visualize
 words = [w for w in vocab if any(w.endswith(s) for s in suffixes)]
 if len(words) > 2000:
     words = words[:2000]
 custom_words = ["service", "serivce", "food", "atmosphere", "delicious", "delicus", "place", "waiter"]
 all_words = words + custom_words
 
+# collect all char-level wor embeddings by applying the character level model to each word in "all_words"
 Wc = []
-
 char_vectorizer = DatasetTools.LambdaVectorizer(lambda w: [c for c in unidecode(w)])
 char_vectorizer = DatasetTools.Padded1DSequenceVectorizer(char_vocabulary, "pre")(char_vectorizer)
 union = DatasetTools.VectorizerUnion()
@@ -69,13 +76,10 @@ for i, batches in enumerate(batch_generator):
 
 Wc = numpy.array(Wc)
 
-word2index = dict((w, i) for i, w in enumerate(all_words))
-index2word = list(all_words)
-VisualizeEmbeddings.print_analysis(Wc, custom_words, 20, word2index, index2word)
-
 Ww = word_embeddings.get_vectors(words, drop_unknown=True)
 
-for name, W in [("char", Wc)]:
+# fit T-SNE to the word-level embeddings and the char-level embeddings and write the results to the respective files
+for name, W in [("char", Wc), ("word", Ww)]:
     tsne = TSNE()
     print "fit..."
     X = tsne.fit_transform(W)
@@ -96,4 +100,3 @@ for name, W in [("char", Wc)]:
             vecs = numpy.array(vecs)
             print suffix, len(vecs)
             f.write(str(vecs.tolist()))
-            c = suffix_colors[suffix]

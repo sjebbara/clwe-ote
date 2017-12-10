@@ -1,8 +1,8 @@
 import semevalabsa.datasets
-from semevalabsa.datasets import Opinion, Sentence
 from nlputils import AnnotationTools
 from nlputils import DataTools
 from nlputils import LexicalTools
+from semevalabsa.datasets import Opinion, Sentence
 
 SENTENCE_START_TOKEN = "<start>"
 SENTENCE_END_TOKEN = "<end>"

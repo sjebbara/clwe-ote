@@ -1,17 +1,15 @@
 import random
+import xml.sax.saxutils
 from collections import defaultdict
 
 import numpy
+from bs4 import BeautifulSoup
 from nlputils import AnnotationTools
+from nlputils import DataTools
 from nlputils import DatasetTools
-
 from nlputils import EvaluationTools
 from nlputils import LearningTools
-from nlputils import DataTools
 from unidecode import unidecode
-
-import xml.sax.saxutils
-from bs4 import BeautifulSoup
 
 
 def sorted_shuffle(documents):
