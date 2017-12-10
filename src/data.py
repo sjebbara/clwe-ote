@@ -51,7 +51,7 @@ def _build_sentence_dataset(reviews, text_preprocessing, tokenization_style, opi
 
 
 def read_semeval2016_restaurant_train(scope, text_preprocessing, tokenization_style, sentence_filter, opinion_filter,
-                                      filename="/home/sjebbara/datasets/SemEval2016 Task5/ABSA16_Restaurants_Train_SB1_v2.xml"):
+                                      filename="/home/sjebbara/datasets/SemEval2016 Task5/en/ABSA16_Restaurants_Train_SB1_v2.xml"):
     reviews = semevalabsa.datasets.read_semeval2016_task5_subtask1(filename)
 
     dataset = _build_sentence_dataset(reviews, text_preprocessing, tokenization_style, opinion_filter)
@@ -59,7 +59,7 @@ def read_semeval2016_restaurant_train(scope, text_preprocessing, tokenization_st
 
 
 def read_semeval2016_restaurant_test(scope, text_preprocessing, tokenization_style, sentence_filter, opinion_filter,
-                                     filename="/home/sjebbara/datasets/SemEval2016 Task5/EN_REST_SB1_TEST.xml.gold"):
+                                     filename="/home/sjebbara/datasets/SemEval2016 Task5/en/EN_REST_SB1_TEST.xml.gold"):
     reviews = semevalabsa.datasets.read_semeval2016_task5_subtask1(filename)
 
     dataset = _build_sentence_dataset(reviews, text_preprocessing, tokenization_style, opinion_filter)
@@ -67,7 +67,7 @@ def read_semeval2016_restaurant_test(scope, text_preprocessing, tokenization_sty
 
 
 def read_semeval2016_restaurant_blind_test(scope, text_preprocessing, tokenization_style,
-                                           filename="/home/sjebbara/datasets/SemEval2016 Task5/EN_REST_SB1_TEST.xml.A"):
+                                           filename="/home/sjebbara/datasets/SemEval2016 Task5/en/EN_REST_SB1_TEST.xml.A"):
     reviews = semevalabsa.datasets.read_semeval2016_task5_subtask1(filename)
 
     dataset = _build_sentence_dataset(reviews, text_preprocessing, tokenization_style, None)

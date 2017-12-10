@@ -107,6 +107,7 @@ def main(conf, plot_scores=True):
     os.makedirs(base_dirpath)
     print "read dataset..."
 
+    # Read documents and split in train/val portions
     if conf.data_split == "original":
         train_dataset = data.read_semeval2016_restaurant_train(conf.scope, conf.text_preprocessing,
                                                                conf.tokenization_style, conf.sentence_filter,
@@ -126,6 +127,7 @@ def main(conf, plot_scores=True):
                                                                conf.opinion_filter)
         train_test_splits = DataTools.cross_validation_split(train_dataset.sentences, conf.n_cross_validation, seed=7)
 
+    # read word embeddings
     word_embeddings = DataTools.Embedding()
     word_embeddings.load(
         "../res/embeddings/amazon_review_corpus_en_100D_advanced_top-{}_W.npy".format(conf.top_k_vocab),
@@ -136,6 +138,7 @@ def main(conf, plot_scores=True):
     conf.word_input_size = len(word_embeddings.vocabulary)
     conf.word_embedding_size = word_embeddings.W.shape[1]
 
+    # read character vocabulary (map from word to index and back)
     char_vocabulary = DataTools.Vocabulary()
     char_vocab = Counter(c for w in word_embeddings.vocabulary.vocab for c in unidecode(w) if c != " ")
     print char_vocab.most_common()
@@ -151,10 +154,12 @@ def main(conf, plot_scores=True):
     if not conf.use_pos:
         pos_vocabulary = None
 
+    # setup plotting
     if plot_scores:
         score_plot = LearningTools.ScorePlot("Aspect Extraction", n_cross_validation=len(train_test_splits),
                                              n_epochs=conf.n_epochs)
 
+    # iterate over cross validation splits and train model
     for n, (train_documents, val_documents) in enumerate(train_test_splits):
         cv_dirpath = os.path.join(base_dirpath, "cv-{}".format(n + 1))
         os.makedirs(cv_dirpath)
@@ -173,8 +178,11 @@ def main(conf, plot_scores=True):
                                                                                                   conf.top_k_vocab)
         print "Model:", model_name
         print conf
+
+        # instantiate model using the defined configuration
         model_fn = models.__dict__[conf.model]
         modelz = model_fn(word_embedding_weights=[word_embeddings.W], **conf)
+        # modelz[0] is the model for tagging sentences, modelz[1] for obtaining a char-level vector for a word
         model = modelz[0]
 
         model.summary()
