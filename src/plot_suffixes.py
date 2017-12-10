@@ -1,7 +1,7 @@
 import numpy
 import pylab
 
-# this script simply visualizes the vectors in the files "char_<suffix>.txt" and "word_<suffix>.txt" which are
+# this script simply visualizes the vectors in the files "tsne_char_<suffix>.txt" and "tsne_word_<suffix>.txt" which are
 # generated in "analyze_trained_model".
 
 suffix_colors = dict([("ing", "r"), ("ly", "g"), ("able", "b"), ("ish", "c"), ("less", "m"), ("ize", "y")])
@@ -13,7 +13,7 @@ for model in ["char", "word"]:
     fig, ax = pylab.subplots()
     suffixes = ["ing", "ize", "less", "able", "ish", "ly"]
     for s in suffixes:
-        with open("{}_{}.txt".format(model, s)) as f:
+        with open("../results/tsne_{}_{}.txt".format(model, s)) as f:
             X = f.readline()
             X = eval(X)
             X = numpy.array(X)

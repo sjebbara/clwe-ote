@@ -5,8 +5,6 @@ import numpy
 from nlputils import DataTools
 from nlputils import DatasetTools
 from nlputils import LearningTools
-from nlputils import VisualizeEmbeddings
-from sklearn.manifold import TSNE
 from unidecode import unidecode
 
 import AspectExtraction
@@ -78,13 +76,8 @@ Wc = numpy.array(Wc)
 
 Ww = word_embeddings.get_vectors(words, drop_unknown=True)
 
-# fit T-SNE to the word-level embeddings and the char-level embeddings and write the results to the respective files
+# Write the vectors to the respective files
 for name, W in [("char", Wc), ("word", Ww)]:
-    tsne = TSNE()
-    print "fit..."
-    X = tsne.fit_transform(W)
-    print "scatter..."
-
     groups = defaultdict(list)
     for vec, w in zip(W, words):
         s = "other"
