@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import numpy
 import pylab
 
@@ -6,7 +8,7 @@ import pylab
 
 suffix_colors = dict([("ing", "r"), ("ly", "g"), ("able", "b"), ("ish", "c"), ("less", "m"), ("ize", "y")])
 suffix_markers = dict([("ing", "x"), ("ly", "o"), ("able", "+"), ("ish", "d"), ("less", "*"), ("ize", "v")])
-suffixes = suffix_colors.keys()
+suffixes = list(suffix_colors.keys())
 suffix_colors["other"] = "k"
 
 for model in ["char", "word"]:

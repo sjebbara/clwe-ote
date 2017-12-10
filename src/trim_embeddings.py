@@ -2,6 +2,7 @@ from nlputils import DataTools
 
 import data
 
+#
 for top_k in [10000, 20000, 50000]:
     word_embeddings = DataTools.Embedding()
     word_embeddings.load("/vol/scstaff/sjebbara/data/embeddings/amazon_review_corpus_en_100D_advanced_W.npy",

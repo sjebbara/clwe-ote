@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import io
 import os
 import ujson
@@ -19,7 +21,7 @@ def read_results(base_dirpath, conditions=None):
         cv_dirnames = [d for d in cv_dirnames if d.startswith("cv-")]
         all_scores = []
         if len(cv_dirnames) != 5:
-            print "WARNING: unexpected number of CVs:", exp_dirname, cv_dirnames
+            print("WARNING: unexpected number of CVs:", exp_dirname, cv_dirnames)
             skip = True
         else:
             for cv_dirname in cv_dirnames:
@@ -36,12 +38,12 @@ def read_results(base_dirpath, conditions=None):
                             skip = True
 
                 except IOError as er:
-                    print "WARNING: necessary files not available:", exp_dirname, cv_dirnames
+                    print("WARNING: necessary files not available:", exp_dirname, cv_dirnames)
                     skip = True
 
         if len(set(len(scores) for scores in all_scores)) != 1:
-            print "Skip", exp_dirname, ". Unfinished training."
-            print conf
+            print("Skip", exp_dirname, ". Unfinished training.")
+            print(conf)
             skip = True
 
         if not skip:
@@ -58,10 +60,10 @@ def read_results(base_dirpath, conditions=None):
 def list_results(base_dirpath, parameter_names, conditions=None):
     experiments = read_results(base_dirpath, conditions)
     experiments = sorted(experiments, key=lambda e: e[3], reverse=True)
-    print "+++ RESULTS: +++"
-    print conditions
+    print("+++ RESULTS: +++")
+    print(conditions)
     for exp in experiments:
-        print exp[3], exp[0], exp[2], "\t".join(["{}: {}".format(p, exp[1][p]) for p in parameter_names])
+        print(exp[3], exp[0], exp[2], "\t".join(["{}: {}".format(p, exp[1][p]) for p in parameter_names]))
 
 
 def find_best(base_dirpath, conditions=None):
@@ -76,7 +78,7 @@ def find_best(base_dirpath, conditions=None):
         cv_dirnames = [d for d in cv_dirnames if d.startswith("cv-")]
         all_scores = []
         if len(cv_dirnames) != 5:
-            print "WARNING: unexpected number of CVs:", exp_dirname, cv_dirnames
+            print("WARNING: unexpected number of CVs:", exp_dirname, cv_dirnames)
             skip = True
         else:
             for cv_dirname in cv_dirnames:
@@ -93,7 +95,7 @@ def find_best(base_dirpath, conditions=None):
                             skip = True
 
                 except IOError as er:
-                    print "WARNING: necessary files not available:", exp_dirname, cv_dirnames
+                    print("WARNING: necessary files not available:", exp_dirname, cv_dirnames)
                     skip = True
 
         if not skip:
@@ -106,11 +108,11 @@ def find_best(base_dirpath, conditions=None):
                 best_score = cv_max
                 best_experiment = (exp_dirname, conf, cv_max_epoch, cv_max, cv_scores, all_scores.T)
 
-    print "+++ RESULTS: +++"
-    print conditions
-    print best_experiment[0]
-    print best_score, best_experiment[2]
-    print best_experiment[1]
+    print("+++ RESULTS: +++")
+    print(conditions)
+    print(best_experiment[0])
+    print(best_score, best_experiment[2])
+    print(best_experiment[1])
     # for x in best_experiment:
     #     print x
 

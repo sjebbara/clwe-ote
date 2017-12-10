@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import numpy
 import pylab
 from collections import defaultdict
@@ -27,8 +29,8 @@ for model in ["char", "word"]:
     for s, z in zip(S, Z):
         grouped_low_dim_vectors[s].append(z)
 
-    for suffix, vecs in grouped_low_dim_vectors.iteritems():
+    for suffix, vecs in grouped_low_dim_vectors.items():
         with open("../results/tsne_{}_{}.txt".format(model, suffix), "w") as f:
             vecs = numpy.array(vecs)
-            print suffix, len(vecs)
+            print(suffix, len(vecs))
             f.write(str(vecs.tolist()))

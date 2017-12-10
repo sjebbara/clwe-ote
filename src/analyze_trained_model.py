@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 from collections import defaultdict
 
@@ -20,7 +22,7 @@ experiment_base_dirpath = os.path.join(AspectExtraction.EXPERIMENTS_OUTPUT_DIR,
 # load the configuration that specifies the network topology
 conf = LearningTools.Configuration.load(os.path.join(experiment_base_dirpath, cv_dirname, "configuration.conf"))
 
-print conf
+print(conf)
 
 model_fn = models.__dict__[conf.model]
 modelz = model_fn(word_embedding_weights=None, **conf)
@@ -35,7 +37,7 @@ char_vocabulary = DataTools.Vocabulary()
 char_vocabulary.load(os.path.join(experiment_base_dirpath, "char_vocabulary.txt"))
 char_vocabulary.set_padding(char_vocabulary.get_index("<0>"))
 char_vocabulary.set_unknown(char_vocabulary.get_index("<?>"))
-print char_vocabulary
+print(char_vocabulary)
 
 word_embeddings = DataTools.Embedding()
 word_embeddings.load("../res/embeddings/amazon_review_corpus_en_100D_advanced_top-100000_W.npy",
@@ -48,7 +50,7 @@ vocab = LearningTools.load_as_list("../res/embeddings/amazon_review_corpus_en_10
 
 # specify the suffixes and their respective colors
 suffix_colors = dict([("ing", "r"), ("ly", "g"), ("able", "b"), ("ish", "c"), ("less", "m"), ("ize", "y")])
-suffixes = suffix_colors.keys()
+suffixes = list(suffix_colors.keys())
 suffix_colors["other"] = "k"
 
 # specify the words to visualize
@@ -66,7 +68,7 @@ union = DatasetTools.VectorizerUnion()
 union = union("char_word_input", char_vectorizer)
 batch_generator = DatasetTools.BatchGenerator(all_words, batch_size=20, vectorizer=union, raw_data_name="word")
 for i, batches in enumerate(batch_generator):
-    print "batch", i
+    print("batch", i)
     char_word_vectors = char_model.predict_on_batch(batches)
     batches.char_word_output = char_word_vectors
     for instance in DatasetTools.BatchIterator([batches]):
@@ -88,8 +90,8 @@ for name, W in [("char", Wc), ("word", Ww)]:
 
         groups[s].append(vec)
 
-    for suffix, vecs in groups.iteritems():
+    for suffix, vecs in groups.items():
         with open("../results/{}_{}.txt".format(name, suffix), "w") as f:
             vecs = numpy.array(vecs)
-            print suffix, len(vecs)
+            print(suffix, len(vecs))
             f.write(str(vecs.tolist()))
