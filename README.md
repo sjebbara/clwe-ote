@@ -39,3 +39,11 @@ and
 
 ```
 
+## The Code
+The code is still in rough shape. I try to clean it soon.
+If you have any qeustion, send me a message on Github or an email.
+
+### Dependencies
+* Keras (Version 1.2.0)
+* NLPUtils <https://github.com/sjebbara/NLPUtils> (Commit a4a506af653e119385d096a9e26ddfbc42de93ac)
+* Theano
