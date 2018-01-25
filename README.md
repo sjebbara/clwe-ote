@@ -34,7 +34,8 @@ and
   address   = {Copenhagen, Denmark},
   publisher = {Association for Computational Linguistics},
   pages     = {159--167},
-  url       = {http://www.aclweb.org/anthology/W17-4124}
+  url       = {http://www.aclweb.org/anthology/W17-4124},
+  doi       = {10.18653/v1/W17-4124}
 }
 
 ```
